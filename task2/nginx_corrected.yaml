@@ -1,0 +1,49 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: sretest
+  name: sretest
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sretest
+  template:
+    metadata:
+      labels:
+        app: sretest
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: node-role.kubernetes.io/application
+                operator: In
+                values:
+                - sretest
+      containers:
+      - image: nginx
+        name: sretest
+        ports:
+        - containerPort: 80
+        resources:
+          limits:
+            cpu: 3
+            memory: 128Mi
+          requests:
+            cpu: 2
+            memory: 128Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sretest-service
+spec:
+  ports:
+  - port: 80
+  selector:
+    app: sretest #Corrected label to select the correct app
+  type: NodePort #Not recommended in production or any production-related environments
