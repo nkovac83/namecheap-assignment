@@ -18,16 +18,20 @@ kubectl label nodes minikube node-role.kubernetes.io/application=sretest
 
 ## Access details
 
-- After correction, verify that the pod has started:
+- After correction, verify that the pod has started
+
 ![Pod started](assets/pod-started.png)
 
-- Check minikube URL:
+- Check minikube URL
+
 ![URL](assets/minikube-url.png)
 
-- Access URL in the browser:
+- Access URL in the browser
+
 ![Browser access](assets/browser-landing.png)
 
-- Check pod logs after start:
+- Check pod logs after start
+
 ![Pod logs](assets/logs-after-access.png)
 
 ## Next steps

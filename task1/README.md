@@ -16,15 +16,28 @@ Once you have a successfully secured domain name served in browser - describe th
 make docker-build
 ```
 
-- Run minikube image load haproxy-ingress:latest to load the custom image in minikube environment
+- Run "minikube image load haproxy-ingress:latest" to load the custom image in minikube environment
 
 - Deploy the Helm chart into the cluster
+
+```bash
+helm repo add haproxy-ingress https://haproxy-ingress.github.io/charts
+helm install haproxy-ingress haproxy-ingress/haproxy-ingress\
+  --create-namespace --namespace=ingress-controller\
+  --set controller.image.repository=localhost/haproxy-ingress\
+  --set controller.image.tag=latest\
+```
+
+- Verify the Ingress controller has started
+
 ![Haproxy-started](assets/haproxy-started.png)
 
 - Deploy test nginx app into the cluster
+
 ![Test-app-started](assets/app-started.png)
 
 - Create Kubernetes secret for TLS --> stuck - the key is encrypted
+
 ![tls-error](assets/encrypted-key.png)
 
 - Create and deploy Ingress object connecting to HAproxy Ingress controller and pointing traffic to app container(nginx)
@@ -40,16 +53,26 @@ make docker-build
 ### Task solution details
 
 - Created test ingress (ingress-test.yml)
+
 ![Ingress created](assets/ingress-started.png)
 
 - Check HAProxy logs to check ingress connection to ingress controller
+
 ![Proxy logs](assets/haproxy-logs.png)
 
 - Update /etc/hosts file
+
 ![Hosts file](assets/hosts-file.png)
 
 - Run "minikube tunnel" to connect HAProxy to local IP
+
 ![Minikube tunnel](assets/minikube-tunnel.png)
 
 - Check connection to the test nginx service using curl
+
 ![App accessed](assets/app-reached.png)
+
+### Additional points
+
+- Store all secrets in a secure manner
+- In case of GitOps approach, encrypt secrets before commiting them to repository
